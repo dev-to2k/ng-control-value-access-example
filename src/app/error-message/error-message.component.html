@@ -1,0 +1,7 @@
+@if (errorMessages() && errorMessages().length) {
+<div class="text-danger mb-2">
+  @for (msg of errorMessages(); track msg) {
+  <div>{{ msg }}</div>
+  }
+</div>
+}

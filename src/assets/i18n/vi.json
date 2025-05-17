@@ -1,0 +1,10 @@
+{
+  "username": {
+    "required": "Tên đăng nhập là bắt buộc.",
+    "minlength": "Tên đăng nhập phải ít nhất 6 ký tự."
+  },
+  "password": {
+    "required": "Mật khẩu là bắt buộc.",
+    "minlength": "Mật khẩu phải ít nhất 6 ký tự."
+  }
+}
