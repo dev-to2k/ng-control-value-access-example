@@ -11,7 +11,6 @@ import {
 import { RouterOutlet } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ErrorMessageComponent } from './error-message/error-message.component';
 import { InputComponent } from './input/input.component';
 
 export function HttpLoaderFactory(http: HttpClient) {
@@ -38,7 +37,6 @@ function requiredAndMinLength(min: number): ValidatorFn {
   imports: [
     RouterOutlet,
     InputComponent,
-    ErrorMessageComponent,
     ReactiveFormsModule,
     CommonModule,
     TranslateModule,
@@ -53,31 +51,7 @@ export class AppComponent {
   });
 
   constructor(public translate: TranslateService) {
-    this.translate.setDefaultLang('vi');
-  }
-
-  get usernameErrors() {
-    const control = this.loginForm.controls['username'];
-    if (!control || !control.errors || !(control.dirty || control.touched))
-      return [];
-    const errors: string[] = [];
-    if (control.errors['required'])
-      errors.push(this.translate.instant('username.required'));
-    if (control.errors['minlength'])
-      errors.push(this.translate.instant('username.minlength'));
-    return errors;
-  }
-
-  get passwordErrors() {
-    const control = this.loginForm.controls['password'];
-    if (!control || !control.errors || !(control.dirty || control.touched))
-      return [];
-    const errors: string[] = [];
-    if (control.errors['required'])
-      errors.push(this.translate.instant('password.required'));
-    if (control.errors['minlength'])
-      errors.push(this.translate.instant('password.minlength'));
-    return errors;
+    this.translate.setDefaultLang('en');
   }
 
   onSubmit() {

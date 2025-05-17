@@ -1,5 +1,5 @@
 <div class="mb-3">
-  <label [for]="id()" class="form-label">{{ label() }}</label>
+  <label for="{{ id() }}" class="form-label">{{ label() }}</label>
   <input
     [type]="type()"
     class="form-control"
@@ -7,10 +7,15 @@
       'is-invalid':
         formControl().invalid && (formControl().dirty || formControl().touched)
     }"
-    [id]="id()"
+    id="{{ id() }}"
+    name="{{ id() }}"
     [placeholder]="placeholder()"
     [value]="value()"
     (input)="handleInput($event)"
     [formControl]="formControl()"
   />
+  @if (formControl().invalid && (formControl().dirty || formControl().touched))
+  {
+  <app-error-message [errorMessages]="getErrorMessages()"></app-error-message>
+  }
 </div>

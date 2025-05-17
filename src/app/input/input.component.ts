@@ -6,11 +6,13 @@ import {
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
 } from '@angular/forms';
+import { TranslateService } from '@ngx-translate/core';
+import { ErrorMessageComponent } from '../error-message/error-message.component';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, NgClass, ReactiveFormsModule],
+  imports: [CommonModule, NgClass, ReactiveFormsModule, ErrorMessageComponent],
   templateUrl: './input.component.html',
   styleUrl: './input.component.css',
   providers: [
@@ -27,11 +29,14 @@ export class InputComponent implements ControlValueAccessor {
   placeholder = input<string>('');
   id = input<string>('');
   formControl = input<FormControl>(undefined as any);
+  field = input<string>('');
 
   value = signal('');
 
   onChange = (value: any) => {};
   onTouched = () => {};
+
+  constructor(private translate: TranslateService) {}
 
   writeValue(value: any): void {
     this.value.set(value);
@@ -49,5 +54,17 @@ export class InputComponent implements ControlValueAccessor {
     this.value.set(value);
     this.onChange(value);
     this.onTouched();
+  }
+
+  getErrorMessages() {
+    const control = this.formControl();
+    if (!control || !control.errors || !(control.dirty || control.touched))
+      return [];
+    const errors: string[] = [];
+    if (control.errors['required'])
+      errors.push(this.translate.instant(`${this.field()}.required`));
+    if (control.errors['minlength'])
+      errors.push(this.translate.instant(`${this.field()}.minlength`));
+    return errors;
   }
 }
