@@ -13,6 +13,19 @@
   },
   "login": {
     "title": "Đăng nhập",
-    "button": "Đăng nhập"
+    "button": "Đăng nhập",
+    "toSignUp": "Chưa có tài khoản? Đăng ký"
+  },
+  "signup": {
+    "title": "Đăng ký",
+    "button": "Đăng ký",
+    "toLogin": "Đã có tài khoản? Đăng nhập"
+  },
+  "confirmPassword": {
+    "label": "Xác nhận mật khẩu",
+    "placeholder": "Nhập lại mật khẩu",
+    "required": "Xác nhận mật khẩu là bắt buộc.",
+    "minlength": "Xác nhận mật khẩu phải ít nhất 6 ký tự.",
+    "mismatch": "Mật khẩu không khớp."
   }
 }

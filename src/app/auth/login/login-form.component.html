@@ -1,0 +1,25 @@
+<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+  <h3 class="mb-4 text-center">{{ "login.title" | translate }}</h3>
+  <app-input
+    [label]="'username.label' | translate"
+    id="username"
+    type="text"
+    [placeholder]="'username.placeholder' | translate"
+    [formControl]="loginForm.controls['username']"
+    [field]="'username'"
+  ></app-input>
+  <app-input
+    [label]="'password.label' | translate"
+    id="password"
+    type="password"
+    [placeholder]="'password.placeholder' | translate"
+    [formControl]="loginForm.controls['password']"
+    [field]="'password'"
+  ></app-input>
+  <button type="submit" class="btn btn-primary w-100 mt-3">
+    {{ "login.button" | translate }}
+  </button>
+  <div class="text-center mt-3">
+    <a routerLink="/sign-up">{{ "login.toSignUp" | translate }}</a>
+  </div>
+</form>

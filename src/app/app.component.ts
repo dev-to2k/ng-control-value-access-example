@@ -1,64 +1,71 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import {
-  AbstractControl,
-  FormControl,
-  FormGroup,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
-import { RouterOutlet } from '@angular/router';
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterOutlet,
+} from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { InputComponent } from './input/input.component';
+import { Subject } from 'rxjs';
+import { map, takeUntil } from 'rxjs/operators';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-function requiredAndMinLength(min: number): ValidatorFn {
-  return (control: AbstractControl) => {
-    const value = control.value || '';
-    const errors: any = {};
-    if (!value) {
-      errors['required'] = true;
-      errors['minlength'] = { requiredLength: min, actualLength: 0 };
-    } else if (value.length < min) {
-      errors['minlength'] = { requiredLength: min, actualLength: value.length };
-    }
-    return Object.keys(errors).length ? errors : null;
-  };
-}
-
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [
-    RouterOutlet,
-    InputComponent,
-    ReactiveFormsModule,
-    CommonModule,
-    TranslateModule,
-  ],
+  imports: [RouterOutlet, CommonModule, TranslateModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  loginForm = new FormGroup({
-    username: new FormControl('', [requiredAndMinLength(6)]),
-    password: new FormControl('', [requiredAndMinLength(6)]),
-  });
+  public translate = inject(TranslateService);
+  private title = inject(Title);
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
+  private destroy$ = new Subject<void>();
 
-  constructor(public translate: TranslateService) {
-    this.translate.setDefaultLang('en');
+  constructor() {
+    this.setupLanguage();
+    this.setupTitle();
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
-    } else {
-      this.loginForm.markAllAsTouched();
-    }
+  setupLanguage() {
+    this.translate.use('vi');
+  }
+
+  setupTitle() {
+    this.router.events
+      .pipe(
+        map((event) => {
+          if (event instanceof NavigationEnd) {
+            let route = this.activatedRoute.firstChild;
+            while (route?.firstChild) {
+              route = route.firstChild;
+            }
+            return route?.snapshot.data['titleKey'] || null;
+          }
+          return null;
+        }),
+        takeUntil(this.destroy$)
+      )
+      .subscribe((titleKey) => {
+        if (titleKey) {
+          this.translate.get(titleKey).subscribe((translated: string) => {
+            this.title.setTitle(translated);
+          });
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

@@ -65,6 +65,10 @@ export class InputComponent implements ControlValueAccessor {
       errors.push(this.translate.instant(`${this.field()}.required`));
     if (control.errors['minlength'])
       errors.push(this.translate.instant(`${this.field()}.minlength`));
+    if (control.errors['maxlength'])
+      errors.push(this.translate.instant(`${this.field()}.maxlength`));
+    if (control.errors['pattern'])
+      errors.push(this.translate.instant(`${this.field()}.pattern`));
     return errors;
   }
 }
