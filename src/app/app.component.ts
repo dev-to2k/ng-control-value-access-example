@@ -37,7 +37,7 @@ export class AppComponent {
   }
 
   setupLanguage() {
-    this.translate.use('vi');
+    this.translate.use('en');
   }
 
   setupTitle() {
